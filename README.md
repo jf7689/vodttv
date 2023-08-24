@@ -2,9 +2,9 @@
 
 Plan to build a website for filtering through twitch vods better. 
 
-##Learned Skills
+## Learned Skills
 - React
 
-##Tasks
+## Tasks
 - Filter by year and month
 - Search by title
