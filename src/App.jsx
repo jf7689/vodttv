@@ -7,16 +7,10 @@ export default function App() {
 
   return (
     <>
-      <h1>VoddTTV</h1>
+      <h1>VodTTV</h1>
       <UserSearch/>
       <h2>Vods</h2>
-      <ul>
-        {vods.map(vod => {
-          return <li key={vod.id}>
-            {vod.title}
-          </li>
-        })}
-      </ul>
+      
     </>
   )
 }
