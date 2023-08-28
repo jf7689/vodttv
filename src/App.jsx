@@ -30,6 +30,11 @@ export default function App() {
   }
   });
 
+  function check()
+  {
+    console.log(token);
+  }
+
   return (
     <>
       <h1>VodTTV</h1>
@@ -37,7 +42,7 @@ export default function App() {
       <a href="" id="authorize"> Connect to twitch</a>
       <UserSearch client_id={client_id} token={token} />
       <h2>Vods</h2>
-      <button className="btn">Token</button>
+      <button className="btn" onClick={check}>Token</button>
     </>
   );
 }
