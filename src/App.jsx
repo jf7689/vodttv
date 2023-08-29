@@ -1,18 +1,25 @@
 import { useState, useEffect } from "react";
 import { UserSearch } from "./components/UserSearch";
+import { Grid } from "./components/Grid";
 
 export default function App() {
+  const url = "https://api.twitch.tv/helix"
   const client_id = "33phdwakkutmw0tyvhvenz0a0jhwd6"
   const redirect = "http://localhost:5173"
+  // access token
   const [token, setToken] = useState(() => {
     const localToken = localStorage.getItem("ACCESS_TOKEN");
     if (localToken == null) return "";
     return JSON.parse(localToken);
-  })
+  });
+  // streamer id
+  const [streamerId, setStreamerId] = useState("");
 
   useEffect(() => {
+    // Get auth
     document.getElementById("authorize").setAttribute("href", `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${client_id}&redirect_uri=${redirect}`);
 
+    // Store token
     if (document.location.hash && document.location.hash != '') {
         let parsedHash = new URLSearchParams(window.location.hash.slice(1));
         if (parsedHash.get('access_token')) {
@@ -28,21 +35,28 @@ export default function App() {
           document.getElementById('access_token').textContent = `${parsedParams.get('error')} - ${parsedParams.get('error_description')}`;
       }
   }
-  });
+  }, []);
 
-  function check()
-  {
+  // check data
+  function check() {
     console.log(token);
+    console.log(streamerId);
   }
+
+  function handleIdCallback(streamer_id) {
+    setStreamerId(streamer_id);
+  }
+
 
   return (
     <>
       <h1>VodTTV</h1>
       <div id="access_token"></div>
-      <a href="" id="authorize"> Connect to twitch</a>
-      <UserSearch client_id={client_id} token={token} />
-      <h2>Vods</h2>
       <button className="btn" onClick={check}>Token</button>
+      <a href="" id="authorize"> Connect to twitch</a>
+      <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback} />
+      <h2>Vods</h2>
+      {streamerId !== "" && <Grid url={url} client_id={client_id} token={token} streamer_id={streamerId}/>}
     </>
   );
 }

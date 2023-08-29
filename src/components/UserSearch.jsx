@@ -1,33 +1,34 @@
 import { useState } from "react";
 
-export function UserSearch({client_id, token}) {
+export function UserSearch({url, client_id, token, idCallback}) {
   const [newName, setNewName] = useState("");
 
+  // Get twitch id for searched username
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(client_id);
-    console.log(token);
+    //console.log(client_id);
+    //console.log(token);
 
     fetch(
-        `https://api.twitch.tv/helix/users?login=${newName}`,
-        {
-            method: "GET",
-            headers: {
-                "Client-ID": client_id,
-                "Authorization": `Bearer ${token}`
-            }
+      // Get streamer's id
+      `${url}/users?login=${newName}`,   
+      {
+        method: "GET",
+        headers: {            
+          "Client-ID": client_id,                
+          "Authorization": `Bearer ${token}`           
         }
+      }
     )
     .then(response => response.json())
     .then(response => {
-        console.log(response)
+        idCallback(response.data[0]["id"]);
     })
     .catch(error => {
         // log issue
         console.log(error);
     });
     
-
     //setNewName("")
   }
 
