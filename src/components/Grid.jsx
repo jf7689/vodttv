@@ -17,7 +17,7 @@ export function Grid({url, client_id, token, streamer_id}) {
         )
         .then(response => response.json())
         .then(r => {
-            setVods([r]);
+            setVods(r.data);
         })
         .catch(error => {
             // log issue
@@ -30,10 +30,19 @@ export function Grid({url, client_id, token, streamer_id}) {
         console.log(streamer_id);
     }
 
-    return (
+    /*return (
         <div>
             Grid of Vods
             <button onClick={checkVods}>Vods</button>
         </div>
-    );
+        );*/
+
+    {vods.map(vod => {
+        console.log(vod)
+        return (
+            <div>
+                {vod.id}
+            </div>
+        );
+    })}
 }
