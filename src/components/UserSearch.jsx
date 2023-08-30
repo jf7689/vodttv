@@ -21,8 +21,8 @@ export function UserSearch({url, client_id, token, idCallback}) {
       }
     )
     .then(response => response.json())
-    .then(response => {
-        idCallback(response.data[0]["id"]);
+    .then(res => {
+        idCallback(res.data[0]["id"]);
     })
     .catch(error => {
         // log issue
