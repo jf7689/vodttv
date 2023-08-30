@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 export function Grid({url, client_id, token, streamer_id}) {
-    // vods
     const [vods, setVods] = useState([]);
     
     useEffect(() => {
+        // Get vods
         fetch(
             `${url}/videos?user_id=${streamer_id}&type=archive&first=100`,
             {
@@ -30,19 +30,15 @@ export function Grid({url, client_id, token, streamer_id}) {
         console.log(streamer_id);
     }
 
-    /*return (
+    return (
         <div>
-            Grid of Vods
-            <button onClick={checkVods}>Vods</button>
+        {vods.map(vod => {
+            return (
+                <div>
+                    {vod.id}
+                </div>
+            );
+        })}
         </div>
-        );*/
-
-    {vods.map(vod => {
-        console.log(vod)
-        return (
-            <div>
-                {vod.id}
-            </div>
-        );
-    })}
+    );
 }
