@@ -38,17 +38,17 @@ export function Grid({url, client_id, token, streamer_id}) {
         {vods.map(vod => {
             // set thumbnail dimensions for url
             let thumbnail = vod.thumbnail_url;
-            thumbnail = thumbnail.replace("%{width}", "320");
-            thumbnail = thumbnail.replace("%{height}", "180");
+            thumbnail = thumbnail.replace("%{width}", "666");
+            thumbnail = thumbnail.replace("%{height}", "375");
             console.log(thumbnail);
 
             // Create Grid cards
             return (
-                <div className={styles.card}>
-                    <a target="_blank" href={`${vod.url}`} rel="noopener noreferrer" key={vod.id}>
+                <div className={styles.card} key={vod.id}>
+                    <a target="_blank" href={`${vod.url}`} rel="noopener noreferrer">
                         <div>
                             <div>
-                                <img src={`${thumbnail}`} alt="Thumbnail"/>
+                                <img className={styles.img} src={`${thumbnail}`} alt="Thumbnail"/>
                             </div>
                             <h3 className={styles.title}>{vod.title}</h3>
                             <div>
