@@ -1,0 +1,15 @@
+.card {
+    outline: 1px black solid;
+}
+
+.img {
+    width: 100%; 
+}
+
+.title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;  
+    margin-top: .25rem;
+}
