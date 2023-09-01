@@ -15,6 +15,13 @@ export default function App() {
   // streamer id
   const [streamerId, setStreamerId] = useState("");
 
+  const [props, setProps] = useState({
+    url: url,
+    client_id: client_id,
+    token: token,
+    streamer_id: ""
+  });
+
   useEffect(() => {
     // Get auth
     document.getElementById("authorize").setAttribute("href", `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${client_id}&redirect_uri=${redirect}`);
@@ -41,10 +48,12 @@ export default function App() {
   function check() {
     console.log(token);
     console.log(streamerId);
+    console.log(props);
   }
 
   function handleIdCallback(streamer_id) {
     setStreamerId(streamer_id);
+    setProps({...props, streamer_id: streamer_id})
   }
 
 
@@ -56,7 +65,7 @@ export default function App() {
       <a href="" id="authorize"> Connect to twitch</a>
       <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback} />
       <h2>Vods</h2>
-      {streamerId !== "" && <Grid url={url} client_id={client_id} token={token} streamer_id={streamerId}/>}
+      <Grid {...(props.streamer_id !== "" && props)}/>
     </>
   );
 }

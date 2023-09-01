@@ -6,28 +6,61 @@ import liveIcon from "../assets/images/live.png";
 export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
+    let allVods = [];
 
     
     useEffect(() => {
         // Get vods
-        fetch(
-            `${url}/videos?user_id=${streamer_id}&type=archive&first=100`,
-            {
-                method: "GET",
-                headers: {
-                    "Client-ID": client_id,
-                    "Authorization": `Bearer ${token}`
+        if (streamer_id !== undefined) {
+            fetch(
+                `${url}/videos?user_id=${streamer_id}&type=archive&first=100`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Client-ID": client_id,
+                        "Authorization": `Bearer ${token}`
+                    }
                 }
-            }
-        )
-        .then(response => response.json())
-        .then(res => {
-            setVods(res.data);
-        })
-        .catch(error => {
-            // log issue
-            console.log(error);
-        });
+            )
+            .then(response => response.json())
+            .then(res => {
+                let cursor = res.pagination.cursor;
+                let paginationObj = res.pagination
+                console.log(paginationObj);
+                allVods.push(res.data);
+
+                while (Object.keys(paginationObj.length) !== 0) {
+                    console.log(cursor);
+                    fetch(
+                        `${url}/videos?user_id=${streamer_id}&type=archive&first=20&after=${cursor}`,
+                        {
+                            method: "GET",
+                            headers: {
+                                "Client-ID": client_id,
+                                "Authorization": `Bearer ${token}`
+                            }
+                        }
+                    )
+                    .then(response => response.json())
+                    .then(res => {
+                        allVods.push(res.data);
+                        cursor = res.pagination.cursor;
+                        paginationObj = res.pagination
+                    })
+                    .catch(error => {
+                        // log issue
+                        console.log(error);
+                    });
+                }
+                
+                setVods(allVods);
+                console.log(allVods);
+            })
+            .catch(error => {
+                // log issue
+                console.log(error);
+            });
+        }
     }, [streamer_id]);
 
     return (
