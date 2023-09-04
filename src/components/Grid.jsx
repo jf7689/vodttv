@@ -10,8 +10,12 @@ export function Grid({url, client_id, token, streamer_id}) {
 
     // Get vods
     async function getVods() {
+        let cursor = "";
+        let paginationObj = {};
+        
         if (streamer_id !== undefined) {
             try {
+                // Get first page of vods
                 const response = await fetch(
                     `${url}/videos?user_id=${streamer_id}&type=archive&first=100`,
                     {
@@ -23,22 +27,22 @@ export function Grid({url, client_id, token, streamer_id}) {
                     }
                 )
                 const responseData = await response.json();
-                setVods(responseData.data);
-                console.log(responseData.data);
+                allVods.push(...responseData.data);
+                paginationObj = responseData.pagination;
+                if (Object.keys(paginationObj).length !== 0) {
+                    cursor = paginationObj.cursor;
+                }
             }
             catch(error) {
                 console.log(error);
             }
-            
-            //let cursor = res.pagination.cursor;
-                //let paginationObj = res.pagination
-                //console.log(paginationObj);
-                //allVods.push(res.data);
 
-                /*while (Object.keys(paginationObj.length) !== 0) {
-                    console.log(cursor);
-                    fetch(
-                        `${url}/videos?user_id=${streamer_id}&type=archive&first=20&after=${cursor}`,
+            // loop for rest of vods if they exist
+            while (Object.keys(paginationObj).length !== 0) {
+                console.log(cursor);
+                try {
+                    const response = await fetch(
+                        `${url}/videos?user_id=${streamer_id}&type=archive&first=100&after=${cursor}`,
                         {
                             method: "GET",
                             headers: {
@@ -47,17 +51,19 @@ export function Grid({url, client_id, token, streamer_id}) {
                             }
                         }
                     )
-                    .then(response => response.json())
-                    .then(res => {
-                        allVods.push(res.data);
-                        cursor = res.pagination.cursor;
-                        paginationObj = res.pagination
-                    })
-                    .catch(error => {
-                        // log issue
-                        console.log(error);
-                    });
-                }*/
+                    const responseData = await response.json();
+                    allVods.push(...responseData.data);
+                    paginationObj = responseData.pagination;
+                    if (Object.keys(paginationObj).length !== 0) {
+                        cursor = paginationObj.cursor;
+                    }                  
+                }
+                catch(error) {
+                    console.log(error);
+                }
+            }
+            
+            setVods(allVods);
         }
     }
     
@@ -67,6 +73,7 @@ export function Grid({url, client_id, token, streamer_id}) {
 
     return (
         <div className={styles.grid}>
+        {console.log(vods)}
         {vods.map(vod => {
             // set thumbnail dimensions for url
             let thumbnail = vod.thumbnail_url;

@@ -6,15 +6,16 @@ export default function App() {
   const url = "https://api.twitch.tv/helix"
   const client_id = "33phdwakkutmw0tyvhvenz0a0jhwd6"
   const redirect = "http://localhost:5173"
-  // access token
+
+  // Access token
   const [token, setToken] = useState(() => {
     const localToken = localStorage.getItem("ACCESS_TOKEN");
     if (localToken == null) return "";
     return JSON.parse(localToken);
   });
-  // streamer id
+  // Streamer id
   const [streamerId, setStreamerId] = useState("");
-
+  // Grid props
   const [props, setProps] = useState({
     url: url,
     client_id: client_id,

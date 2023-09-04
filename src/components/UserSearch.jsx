@@ -6,8 +6,6 @@ export function UserSearch({url, client_id, token, idCallback}) {
   // Get twitch id for searched username
   async function handleSubmit(e) {
     e.preventDefault();
-    //console.log(client_id);
-    //console.log(token);
 
     // Get streamer's id
     try {
@@ -28,7 +26,8 @@ export function UserSearch({url, client_id, token, idCallback}) {
       console.log(error);
     }
     
-    //setNewName("")
+    // Clear search bar
+    setNewName("");
   }
 
   return (
