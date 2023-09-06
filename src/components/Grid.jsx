@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
@@ -6,15 +6,15 @@ import liveIcon from "../assets/images/live.png";
 export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
-    const [vodStart, setVodStart] = useState(0);
-    const [vodEnd, setVodEnd] = useState(30);
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
-    let throttleTimer;
+    const observer = useRef(null);
 
     // Get vods
     async function getVods() {
         let cursor = "";
         let paginationObj = {};
+        // Reset for new search
+        setAllVods([]);
         
         if (streamer_id !== undefined) {
             try {
@@ -81,15 +81,42 @@ export function Grid({url, client_id, token, streamer_id}) {
         }
     }
 
+    // Load next 30 vods for infinite scroll
     function loadNewCards() {
-        setVodStart(vodEnd);
-        setVodEnd(vodStart + 30);
-        setVods(currentVods => {
-            return [...currentVods, ...allVods.slice(vodStart, vodEnd)]
-        });
-        console.log(vodStart);
-        console.log(vodEnd);
+        // Set range for slice
+        let vodStart = vods.length;
+        let vodEnd = vods.length + 30;
+        if (vodEnd > allVods.length) {
+            vodEnd = allVods.length;
+        }
+
+        // Add vods
+        if (vodStart !== vodEnd) {
+            setVods(currentVods => {
+                return [...currentVods, ...allVods.slice(vodStart, vodEnd)]
+            });
+        }
     }
+
+    // Infinite scroll
+    const lastCard = useCallback(node => {
+        if (!node) return;
+        if (observer.current) {
+            observer.current.disconnect();
+        }
+        if (vods.length === allVods.length ) {
+            return;
+        }
+        
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                loadNewCards();
+            }
+        });
+
+        // Observe new last vod
+        observer.current.observe(node);
+    }, [loadNewCards])
     
     // Username had been searched
     useEffect(() => {
@@ -98,48 +125,36 @@ export function Grid({url, client_id, token, streamer_id}) {
 
     }, [streamer_id]);
 
-    /*useEffect(() => {
-        const observer = new IntersectionObserver(entries => {
-            const lastCard = entries[0];
-            if (!lastCard.isIntersecting) return;
-            loadNewCards();
-            observer.unobserve(lastCard.target);
-            observer.observe(vods[vods.length - 1])
-        }, {
-            rootMargin: "100px"
-        });
     
-        observer.observe(vods[vods.length - 1]);
-        console.log("Load vods");
-
-    }, [vods]);*/
 
     function checkVods() {
         console.log(allVods);
         console.log(vods);
+        console.log(allVods.length);
     }
 
     return (
-        <div className={styles.grid}>
-        <button onClick={checkVods}>Vods</button>
-        {
-            
-        }
-        {vods.map(vod => {
-            // set thumbnail dimensions for url
-            let thumbnail = vod.thumbnail_url;
-            thumbnail = thumbnail.replace("%{width}", "666").replace("%{height}", "375");
-            if (thumbnail.includes("404/404")) {
-                thumbnail = liveIcon;
-            }
+        <>
+            <button onClick={checkVods}>Vods</button>
+            <div className={styles.grid}>
+            {vods.map((vod, i) => {
+                // Set thumbnail dimensions for url
+                let thumbnail = vod.thumbnail_url;
+                thumbnail = thumbnail.replace("%{width}", "666").replace("%{height}", "375");
+                if (thumbnail.includes("404/404")) {
+                    thumbnail = liveIcon;
+                }
 
-            // Create Grid cards
-            return (
-                <Card key={vod.id} url={vod.url} thumbnail={thumbnail} title={vod.title} views={formatter.format(vod.view_count)}
-                date={vod.published_at.slice(0,10)} duration={vod.duration}
-                />
-            );
-        })}
-        </div>
+                // Create Grid of vods
+                return (
+                    <div ref={i === vods.length - 1 ? lastCard : null} key={vod.id}>
+                        <Card  url={vod.url} thumbnail={thumbnail} title={vod.title} views={formatter.format(vod.view_count)}
+                        date={vod.published_at.slice(0,10)} duration={vod.duration}
+                        />
+                    </div>
+                );
+            })}
+            </div>
+        </>
     );
 }
