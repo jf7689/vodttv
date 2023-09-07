@@ -98,6 +98,10 @@ export function Grid({url, client_id, token, streamer_id}) {
         setFilterVods([...allVods].reverse());
     }
 
+    function popular() {
+        setFilterVods([...allVods].sort((a, b) => b.view_count - a.view_count));
+    }
+
     // Load next 30 vods for infinite scroll
     function loadNewCards() {
         // Set range for slice
@@ -166,7 +170,7 @@ export function Grid({url, client_id, token, streamer_id}) {
             <button onClick={checkVods}>Vods</button>
             <div>
                 <button onClick={latestVods}>Latest</button>
-                <button>Popular</button>
+                <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
             </div>
             <div className={styles.grid}>
