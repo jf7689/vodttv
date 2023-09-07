@@ -6,6 +6,7 @@ import liveIcon from "../assets/images/live.png";
 export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
+    const [filterVods, setFilterVods] = useState([]);
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
 
@@ -13,8 +14,6 @@ export function Grid({url, client_id, token, streamer_id}) {
     async function getVods() {
         let cursor = "";
         let paginationObj = {};
-        // Reset for new search
-        setAllVods([]);
         
         if (streamer_id !== undefined) {
             try {
@@ -31,9 +30,15 @@ export function Grid({url, client_id, token, streamer_id}) {
                 )
                 const responseData = await response.json();
 
-                // Store vods
+                // Initial 30 vods shown
                 setVods(responseData.data);
+
+                // Store vods for reference for filtering
                 setAllVods(currentVods => {
+                    return [...currentVods, ...responseData.data]
+                });
+                // Default filter is latests vods
+                setFilterVods(currentVods => {
                     return [...currentVods, ...responseData.data]
                 });
                 
@@ -63,8 +68,12 @@ export function Grid({url, client_id, token, streamer_id}) {
                     )
                     const responseData = await response.json();
 
-                    // Store vods
+                    // Store vods for reference for filtering
                     setAllVods(currentVods => {
+                        return [...currentVods, ...responseData.data]
+                    });
+                    // Default filter is latests vods
+                    setFilterVods(currentVods => {
                         return [...currentVods, ...responseData.data]
                     });
 
@@ -81,19 +90,27 @@ export function Grid({url, client_id, token, streamer_id}) {
         }
     }
 
+    function latestVods() {
+        setFilterVods(allVods);
+    }
+
+    function oldestVods() {
+        setFilterVods([...allVods].reverse());
+    }
+
     // Load next 30 vods for infinite scroll
     function loadNewCards() {
         // Set range for slice
         let vodStart = vods.length;
         let vodEnd = vods.length + 30;
-        if (vodEnd > allVods.length) {
-            vodEnd = allVods.length;
+        if (vodEnd > filterVods.length) {
+            vodEnd = filterVods.length;
         }
 
         // Add vods
         if (vodStart !== vodEnd) {
             setVods(currentVods => {
-                return [...currentVods, ...allVods.slice(vodStart, vodEnd)]
+                return [...currentVods, ...filterVods.slice(vodStart, vodEnd)]
             });
         }
     }
@@ -104,7 +121,7 @@ export function Grid({url, client_id, token, streamer_id}) {
         if (observer.current) {
             observer.current.disconnect();
         }
-        if (vods.length === allVods.length ) {
+        if (vods.length === filterVods.length ) {
             return;
         }
         
@@ -117,25 +134,41 @@ export function Grid({url, client_id, token, streamer_id}) {
         // Observe new last vod
         observer.current.observe(node);
     }, [loadNewCards])
+
     
     // Username had been searched
     useEffect(() => {
+        // Reset for new search
+        setAllVods([]);
+        setFilterVods([]);
+        setVods([]);
+
         getVods();
         console.log("Grab Vods");
 
     }, [streamer_id]);
 
+    // Show first 30 vods after a filter has been applied
+    useEffect(() => {
+        setVods([...filterVods.slice(0, 30)]);
+        console.log("Triggered");
+    }, [filterVods])
     
 
     function checkVods() {
-        console.log(allVods);
-        console.log(vods);
-        console.log(allVods.length);
+        console.log("All Vods", allVods);
+        console.log("Filter Vods", filterVods);
+        console.log("Shown Vods", vods);
     }
 
     return (
         <>
             <button onClick={checkVods}>Vods</button>
+            <div>
+                <button onClick={latestVods}>Latest</button>
+                <button>Popular</button>
+                <button onClick={oldestVods}>Oldest</button>
+            </div>
             <div className={styles.grid}>
             {vods.map((vod, i) => {
                 // Set thumbnail dimensions for url
