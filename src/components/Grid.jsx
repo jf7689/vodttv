@@ -7,6 +7,7 @@ export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
     const [filterVods, setFilterVods] = useState([]);
+    const [title, setTitle] = useState("");
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
 
@@ -102,6 +103,13 @@ export function Grid({url, client_id, token, streamer_id}) {
         setFilterVods([...allVods].sort((a, b) => b.view_count - a.view_count));
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        setFilterVods(allVods.filter(vod => {
+            return vod.title.includes(title);
+        }));
+    }
+
     // Load next 30 vods for infinite scroll
     function loadNewCards() {
         // Set range for slice
@@ -168,6 +176,11 @@ export function Grid({url, client_id, token, streamer_id}) {
     return (
         <>
             <button onClick={checkVods}>Vods</button>
+            <form onSubmit={handleSubmit} className="title-form">
+                <div className="form-row">
+                <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
+                </div>
+            </form>
             <div>
                 <button onClick={latestVods}>Latest</button>
                 <button onClick={popular}>Popular</button>
