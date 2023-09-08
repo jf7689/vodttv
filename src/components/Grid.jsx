@@ -99,6 +99,10 @@ export function Grid({url, client_id, token, streamer_id}) {
         setFilterVods([...allVods].reverse());
     }
 
+    function reverseFilter() {
+        setFilterVods([...filterVods].reverse());
+    }
+
     function popular() {
         setFilterVods([...allVods].sort((a, b) => b.view_count - a.view_count));
     }
@@ -185,6 +189,7 @@ export function Grid({url, client_id, token, streamer_id}) {
                 <button onClick={latestVods}>Latest</button>
                 <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
+                <button onClick={reverseFilter}>Reverse Order</button>
             </div>
             <div className={styles.grid}>
             {vods.map((vod, i) => {
