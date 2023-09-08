@@ -91,22 +91,27 @@ export function Grid({url, client_id, token, streamer_id}) {
         }
     }
 
+    // Show vods descending from latest
     function latestVods() {
         setFilterVods(allVods);
     }
 
+    // Show vods descending from oldest  
     function oldestVods() {
         setFilterVods([...allVods].reverse());
     }
 
+    // Reverse order of shown vods for any filtering
     function reverseFilter() {
         setFilterVods([...filterVods].reverse());
     }
 
+    // Show vods descending from most views
     function popular() {
         setFilterVods([...allVods].sort((a, b) => b.view_count - a.view_count));
     }
 
+    // Search vod titles for substring
     function handleSubmit(e) {
         e.preventDefault();
         setFilterVods(allVods.filter(vod => {
@@ -180,17 +185,20 @@ export function Grid({url, client_id, token, streamer_id}) {
     return (
         <>
             <button onClick={checkVods}>Vods</button>
+            
             <form onSubmit={handleSubmit} className="title-form">
                 <div className="form-row">
                 <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
                 </div>
             </form>
             <div>
+
                 <button onClick={latestVods}>Latest</button>
                 <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
                 <button onClick={reverseFilter}>Reverse Order</button>
             </div>
+
             <div className={styles.grid}>
             {vods.map((vod, i) => {
                 // Set thumbnail dimensions for url
