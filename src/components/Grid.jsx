@@ -8,6 +8,8 @@ export function Grid({url, client_id, token, streamer_id}) {
     const [allVods, setAllVods] = useState([]);
     const [filterVods, setFilterVods] = useState([]);
     const [title, setTitle] = useState("");
+    const [allYears, setAllYears] = useState([]);
+    const [year, setYear] = useState("Year");
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
 
@@ -89,6 +91,8 @@ export function Grid({url, client_id, token, streamer_id}) {
                 }
             }
         }
+        // Get years for dropdown
+        setAllYears([...new Set(allVods.map(vod => vod.published_at.slice(0,4)))]);
     }
 
     // Show vods descending from latest
@@ -112,11 +116,26 @@ export function Grid({url, client_id, token, streamer_id}) {
     }
 
     // Search vod titles for substring
-    function handleSubmit(e) {
+    function handleTitleSearch(e) {
         e.preventDefault();
         setFilterVods(allVods.filter(vod => {
             return vod.title.includes(title);
         }));
+    }
+
+    function getYears() {
+        // Get years
+        setAllYears([...new Set(allVods.map(vod => vod.published_at.slice(0,4)))]);
+    }
+
+    function fillDropdowns() {
+        return allYears.map(yearOption => {
+            <option value={yearOption}>{yearOption}</option>
+        });
+    }
+
+    function handleYearFilter(e) {
+        setYear(e.target.value);
     }
 
     // Load next 30 vods for infinite scroll
@@ -165,6 +184,7 @@ export function Grid({url, client_id, token, streamer_id}) {
         setVods([]);
 
         getVods();
+
         console.log("Grab Vods");
 
     }, [streamer_id]);
@@ -180,23 +200,32 @@ export function Grid({url, client_id, token, streamer_id}) {
         console.log("All Vods", allVods);
         console.log("Filter Vods", filterVods);
         console.log("Shown Vods", vods);
+        console.log("All Years", allYears);
     }
 
     return (
         <>
             <button onClick={checkVods}>Vods</button>
             
-            <form onSubmit={handleSubmit} className="title-form">
+            <form onSubmit={handleTitleSearch} className="title-form">
                 <div className="form-row">
                 <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
                 </div>
             </form>
             <div>
-
+                <select value={year} onChange={handleYearFilter}>
+                    <option disabled>Year</option>
+                    {allYears.map(yearOption => {
+                        <option value={yearOption}>{yearOption}</option>
+                    })}
+                </select>
+            </div>
+            <div>
                 <button onClick={latestVods}>Latest</button>
                 <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
                 <button onClick={reverseFilter}>Reverse Order</button>
+                <button onClick={getYears}>Filters</button>
             </div>
 
             <div className={styles.grid}>
