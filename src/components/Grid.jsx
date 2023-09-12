@@ -91,8 +91,6 @@ export function Grid({url, client_id, token, streamer_id}) {
                 }
             }
         }
-        // Get years for dropdown
-        setAllYears([...new Set(allVods.map(vod => vod.published_at.slice(0,4)))]);
     }
 
     // Show vods descending from latest
@@ -121,21 +119,24 @@ export function Grid({url, client_id, token, streamer_id}) {
         setFilterVods(allVods.filter(vod => {
             return vod.title.includes(title);
         }));
+        setTitle("");
     }
 
+    // Get years for dropdown
     function getYears() {
-        // Get years
         setAllYears([...new Set(allVods.map(vod => vod.published_at.slice(0,4)))]);
     }
 
-    function fillDropdowns() {
-        return allYears.map(yearOption => {
-            <option value={yearOption}>{yearOption}</option>
-        });
+    // Change year dropdown to new selection
+    function handleSetYear(e) {
+        setYear(e.target.value);
     }
 
-    function handleYearFilter(e) {
-        setYear(e.target.value);
+    // Show vods with year
+    function dateFilter() {
+        setFilterVods(allVods.filter(vod => {
+            return vod.published_at.slice(0,4).includes(year);
+        }));
     }
 
     // Load next 30 vods for infinite scroll
@@ -194,7 +195,6 @@ export function Grid({url, client_id, token, streamer_id}) {
         setVods([...filterVods.slice(0, 30)]);
         console.log("Triggered");
     }, [filterVods])
-    
 
     function checkVods() {
         console.log("All Vods", allVods);
@@ -213,10 +213,12 @@ export function Grid({url, client_id, token, streamer_id}) {
                 </div>
             </form>
             <div>
-                <select value={year} onChange={handleYearFilter}>
+                <select value={year} onChange={handleSetYear}>
                     <option disabled>Year</option>
                     {allYears.map(yearOption => {
-                        <option value={yearOption}>{yearOption}</option>
+                        return (
+                        <option key={yearOption} value={yearOption}>{yearOption}</option>
+                        );
                     })}
                 </select>
             </div>
@@ -225,7 +227,8 @@ export function Grid({url, client_id, token, streamer_id}) {
                 <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
                 <button onClick={reverseFilter}>Reverse Order</button>
-                <button onClick={getYears}>Filters</button>
+                <button onClick={getYears}>Date Filters</button>
+                <button onClick={dateFilter}>Filter</button>
             </div>
 
             <div className={styles.grid}>
