@@ -10,6 +10,7 @@ export function Grid({url, client_id, token, streamer_id}) {
     const [title, setTitle] = useState("");
     const [allYears, setAllYears] = useState([]);
     const [year, setYear] = useState("Year");
+    const [month, setMonth] = useState("Month");
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
 
@@ -132,11 +133,29 @@ export function Grid({url, client_id, token, streamer_id}) {
         setYear(e.target.value);
     }
 
-    // Show vods with year
+    function handleSetMonth(e) {
+        setMonth(e.target.value);
+    }
+
+    // Show vods from specified year and/or month
     function dateFilter() {
-        setFilterVods(allVods.filter(vod => {
-            return vod.published_at.slice(0,4).includes(year);
-        }));
+        if (year !== "Year" && month !== "Month")
+        {
+            setFilterVods(allVods.filter(vod => {
+                return vod.published_at.slice(0,7).includes(`${year}-${month}`);
+            }));
+        }
+        else if (year !== "Year") {
+            setFilterVods(allVods.filter(vod => {
+                return vod.published_at.slice(0,4).includes(year);
+            }));
+        }
+        else if (month !== "Month") {
+            setFilterVods(allVods.filter(vod => {
+                return vod.published_at.slice(5,7).includes(month);
+            }));
+        }
+
     }
 
     // Load next 30 vods for infinite scroll
@@ -214,12 +233,27 @@ export function Grid({url, client_id, token, streamer_id}) {
             </form>
             <div>
                 <select value={year} onChange={handleSetYear}>
-                    <option disabled>Year</option>
+                    <option value="Year">Year</option>
                     {allYears.map(yearOption => {
                         return (
                         <option key={yearOption} value={yearOption}>{yearOption}</option>
                         );
                     })}
+                </select>
+                <select value={month} onChange={handleSetMonth}>
+                    <option value="Month">Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                 </select>
             </div>
             <div>
