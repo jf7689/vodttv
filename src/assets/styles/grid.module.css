@@ -3,6 +3,14 @@
     gap: 1rem;
 }
 
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: block;
+}
+
 @media (min-width: 700px) and (max-width: 1100px) {
     .grid {
         grid-template-columns: repeat(2, 1fr);

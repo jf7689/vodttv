@@ -11,6 +11,7 @@ export function Grid({url, client_id, token, streamer_id}) {
     const [allYears, setAllYears] = useState([]);
     const [year, setYear] = useState("Year");
     const [month, setMonth] = useState("Month");
+    const [isLoaded, setIsLoaded] = useState(false);
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
 
@@ -18,6 +19,7 @@ export function Grid({url, client_id, token, streamer_id}) {
     async function getVods() {
         let cursor = "";
         let paginationObj = {};
+        setIsLoaded(false);
         
         if (streamer_id !== undefined) {
             try {
@@ -91,6 +93,16 @@ export function Grid({url, client_id, token, streamer_id}) {
                     console.log(error);
                 }
             }
+
+            return true;
+        }
+    }
+
+    // Check all vods have been loaded
+    async function vodsLoaded() {
+        const isLoaded = await getVods();
+        if (isLoaded) {
+            setIsLoaded(true);
         }
     }
 
@@ -211,7 +223,7 @@ export function Grid({url, client_id, token, streamer_id}) {
         setFilterVods([]);
         setVods([]);
 
-        getVods();
+        vodsLoaded();
 
         console.log("Grab Vods");
 
@@ -233,47 +245,52 @@ export function Grid({url, client_id, token, streamer_id}) {
     return (
         <>
             <button onClick={checkVods}>Vods</button>
-            
-            <form onSubmit={handleTitleSearch} className="title-form">
-                <div className="form-row">
-                <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
-                </div>
-            </form>
-            <dialog id="dateFilter">
-                <select value={year} onChange={handleSetYear}>
-                    <option value="Year">Year</option>
-                    {allYears.map(yearOption => {
-                        return (
-                        <option key={yearOption} value={yearOption}>{yearOption}</option>
-                        );
-                    })}
-                </select>
-                <select value={month} onChange={handleSetMonth}>
-                    <option value="Month">Month</option>
-                    <option value="01">January</option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                </select>
-                <button onClick={closeFilterModal}>Close</button>
+
+            <div className={!isLoaded && streamer_id !== undefined ? styles.shown : styles.hidden}>
+                <h2>...Loading All Vods</h2>
+            </div>
+            <div className={isLoaded ? styles.shown: styles.hidden} id="FilterSection">
+                <form onSubmit={handleTitleSearch} className="title-form">
+                    <div className="form-row">
+                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
+                    </div>
+                </form>
+                <dialog id="dateFilter">
+                    <select value={year} onChange={handleSetYear}>
+                        <option value="Year">Year</option>
+                        {allYears.map(yearOption => {
+                            return (
+                            <option key={yearOption} value={yearOption}>{yearOption}</option>
+                            );
+                        })}
+                    </select>
+                    <select value={month} onChange={handleSetMonth}>
+                        <option value="Month">Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <button onClick={closeFilterModal}>Close</button>
+                    <div>
+                        <button onClick={dateFilter}>Filter</button>
+                    </div>
+                </dialog>
                 <div>
-                    <button onClick={dateFilter}>Filter</button>
+                    <button onClick={latestVods}>Latest</button>
+                    <button onClick={popular}>Popular</button>
+                    <button onClick={oldestVods}>Oldest</button>
+                    <button onClick={reverseFilter}>Reverse Order</button>
+                    <button onClick={getYears}>Date Filters</button>
                 </div>
-            </dialog>
-            <div>
-                <button onClick={latestVods}>Latest</button>
-                <button onClick={popular}>Popular</button>
-                <button onClick={oldestVods}>Oldest</button>
-                <button onClick={reverseFilter}>Reverse Order</button>
-                <button onClick={getYears}>Date Filters</button>
             </div>
 
             <div className={styles.grid}>
