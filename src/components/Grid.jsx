@@ -126,6 +126,8 @@ export function Grid({url, client_id, token, streamer_id}) {
     // Get years for dropdown
     function getYears() {
         setAllYears([...new Set(allVods.map(vod => vod.published_at.slice(0,4)))]);
+        const modal = document.getElementById("dateFilter");
+        modal.showModal();
     }
 
     // Change year dropdown to new selection
@@ -156,6 +158,12 @@ export function Grid({url, client_id, token, streamer_id}) {
             }));
         }
 
+        closeFilterModal();
+    }
+
+    function closeFilterModal() {
+        const modal = document.getElementById("dateFilter");
+        modal.close();
     }
 
     // Load next 30 vods for infinite scroll
@@ -231,7 +239,7 @@ export function Grid({url, client_id, token, streamer_id}) {
                 <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
                 </div>
             </form>
-            <div>
+            <dialog id="dateFilter">
                 <select value={year} onChange={handleSetYear}>
                     <option value="Year">Year</option>
                     {allYears.map(yearOption => {
@@ -255,14 +263,17 @@ export function Grid({url, client_id, token, streamer_id}) {
                     <option value="11">November</option>
                     <option value="12">December</option>
                 </select>
-            </div>
+                <button onClick={closeFilterModal}>Close</button>
+                <div>
+                    <button onClick={dateFilter}>Filter</button>
+                </div>
+            </dialog>
             <div>
                 <button onClick={latestVods}>Latest</button>
                 <button onClick={popular}>Popular</button>
                 <button onClick={oldestVods}>Oldest</button>
                 <button onClick={reverseFilter}>Reverse Order</button>
                 <button onClick={getYears}>Date Filters</button>
-                <button onClick={dateFilter}>Filter</button>
             </div>
 
             <div className={styles.grid}>
