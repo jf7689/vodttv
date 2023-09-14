@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
+import loadAnim from "../assets/images/loading.svg"
 
 export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
@@ -33,11 +34,8 @@ export function Grid({url, client_id, token, streamer_id}) {
                             "Authorization": `Bearer ${token}`
                         }
                     }
-                )
+                );
                 const responseData = await response.json();
-
-                // Initial 30 vods shown
-                setVods(responseData.data);
 
                 // Store vods for reference for filtering
                 setAllVods(currentVods => {
@@ -57,6 +55,9 @@ export function Grid({url, client_id, token, streamer_id}) {
             catch(error) {
                 console.log(error);
             }
+
+            // Show first 30 vods
+            setVods([...allVods].slice(0, 30));
 
             // loop for rest of vods if they exist
             while (Object.keys(paginationObj).length !== 0) {
@@ -247,7 +248,10 @@ export function Grid({url, client_id, token, streamer_id}) {
             <button onClick={checkVods}>Vods</button>
 
             <div className={!isLoaded && streamer_id !== undefined ? styles.shown : styles.hidden}>
-                <h2>...Loading All Vods</h2>
+                <div>
+                    <img src={loadAnim} alt="Loading Animation"/>
+                    <h2>...Loading All Vods</h2>
+                </div>
             </div>
             <div className={isLoaded ? styles.shown: styles.hidden} id="FilterSection">
                 <form onSubmit={handleTitleSearch} className="title-form">
