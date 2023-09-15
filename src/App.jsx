@@ -12,7 +12,9 @@ export default function App() {
   const [isValid, setIsValid] = useState(false);
   const [token, setToken] = useState(() => {
     const localToken = localStorage.getItem("ACCESS_TOKEN");
-    if (localToken == null) return "";
+    if (localToken === null) {
+      return "";
+    }
     return JSON.parse(localToken);
   });
   // Streamer id
@@ -26,57 +28,70 @@ export default function App() {
   });
 
   async function validateToken() {
-    try {
-      const response = await fetch(
-        "https://id.twitch.tv/oauth2/validate",
-        {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+    if (token !== "") {
+      try {
+        const response = await fetch(
+          "https://id.twitch.tv/oauth2/validate",
+          {
+              headers: {
+                  "Authorization": `Bearer ${token}`
+              }
+          }
+        );
+  
+        const responseData = await response.json();
+        if (responseData.client_id) {
+          setIsValid(true);
+          setProps({...props, token: token});
         }
-      );
-
-      const responseData = await response.json();
-      if (responseData.client_id) {
-        setIsValid(true);
+        else if (responseData.status === 401) {
+          localStorage.removeItem("ACCESS_TOKEN");
+          setToken("");
+          storeToken();
+        }
       }
-      else if (responseData.status === 401) {
-        setIsValid(false);
+      catch(error) {
+        console.log(error);
       }
     }
-    catch(error) {
-      console.log(error);
+    else {
+      setToken("");
+      storeToken();
     }
   } 
 
-  useEffect(() => {
-    validateToken();
-
-    if (!isValid) {
-      // Get auth
+  function storeToken() {
+      // Link auth
       document.getElementById("authorize").setAttribute("href", `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${client_id}&redirect_uri=${redirect}`);
 
       // Store token
       if (document.location.hash && document.location.hash != "") {
-          let parsedHash = new URLSearchParams(window.location.hash.slice(1));
-          if (parsedHash.get("access_token")) {
-              const access_token = parsedHash.get("access_token");
-              setToken(access_token);
-              localStorage.setItem("ACCESS_TOKEN", JSON.stringify(access_token));
-          }
-      }
-      else if (document.location.search && document.location.search != "") {
-        var parsedParams = new URLSearchParams(window.location.search);
-        if (parsedParams.get("error_description")) {
-            document.getElementById("access_token").textContent = `${parsedParams.get("error")} - authorization required to use site`;
+        let parsedHash = new URLSearchParams(window.location.hash.slice(1));
+        if (parsedHash.get("access_token")) {
+            const access_token = parsedHash.get("access_token");
+            setToken(access_token);
+            console.log("Access Token stored");
+            localStorage.setItem("ACCESS_TOKEN", JSON.stringify(access_token));
         }
+    }
+    else if (document.location.search && document.location.search != "") {
+      // Error
+      var parsedParams = new URLSearchParams(window.location.search);
+      if (parsedParams.get("error_description")) {
+          document.getElementById("access_token").textContent = `${parsedParams.get("error")} - authorization required to use site`;
       }
     }
-  }, []);
+  }
+
+  useEffect(() => {
+    validateToken();
+  }, [token]);
 
   // check data
   function check() {
     console.log(token);
+    console.log(url);
+    console.log(client_id);
     console.log(streamerId);
     console.log(props);
   }
