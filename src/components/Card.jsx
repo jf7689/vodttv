@@ -6,7 +6,7 @@ export function Card({url, thumbnail, title, views, date, duration}) {
                 <a target="_blank" href={`${url}`} rel="noopener noreferrer">
                     <div>
                         <div>
-                            <img className={`${styles.img} ${styles.card}`} src={`${thumbnail}`} alt="Thumbnail"/>
+                            <img className={`${styles.card}`} src={`${thumbnail}`} alt="Thumbnail"/>
                         </div>
                         <h3 className={styles.title}>{title}</h3>
                         <div>
