@@ -36,7 +36,6 @@ export function UserSearch({url, client_id, token, idCallback}) {
         <div className="form-row">
           <input value={newName} onChange={(e) => setNewName(e.target.value)} type="text" id="user-search" placeholder="Twitch Username"/>
         </div>
-        <button className="btn">Search</button>
       </form>
     </>
   );

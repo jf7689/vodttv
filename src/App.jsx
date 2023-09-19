@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { UserSearch } from "./components/UserSearch";
 import { Grid } from "./components/Grid";
 import styles from "./assets/styles/app.module.css"
+import connectImg from "./assets/images/twitch_login.png"; 
 
 export default function App() {
   const url = "https://api.twitch.tv/helix"
@@ -103,14 +104,33 @@ export default function App() {
 
 
   return (
-    <>
-      <h1>VodTTV</h1>
+    <div>
+      <header>
+        <div className={styles.headerContainer}>
+          <h2 id={styles.title}>VodTTV</h2>
+          <UserSearch className={styles.search} url={url} client_id={client_id} token={token} idCallback={handleIdCallback}/>
+        </div>
+      </header>
+      <div></div>
       <div id="access_token"></div>
-      <button className="btn" onClick={check}>Token</button>
-      <a className={ isValid ? styles.hidden : styles.shown} href="" id="authorize"> Connect to twitch</a>
-      <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback} />
-      <h2>Vods</h2>
+
+      <div className={`${styles.introContainer} ${streamerId !== "" ? styles.hidden : styles.shown}`}>
+        <div className={styles.introContent}>
+          <h1 className={styles.introTitle}>VodTTV</h1>
+          <p className={styles.introPar}>
+            Looking to find Twitch vods easier. VodTTV provides you the ability to search vods by title and filtering
+            by date. Make your life easier with less scrolling.  
+          </p>
+          <a className={` ${isValid ? styles.hidden : styles.shown}`} href="" id="authorize"> 
+            <div>
+              <img className={styles.connect} src={connectImg} alt="Connect Twitch"/>
+            </div>
+          </a>
+        </div>
+
+      </div>
+      {/*<button className="btn" onClick={check}>Token</button>*/}
       <Grid {...(props.streamer_id !== "" && props)}/>
-    </>
+    </div>
   );
 }
