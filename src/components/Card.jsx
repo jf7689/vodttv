@@ -5,8 +5,11 @@ export function Card({url, thumbnail, title, views, date, duration}) {
             <div className={styles.card}>
                 <a target="_blank" href={`${url}`} rel="noopener noreferrer">
                     <div>
-                        <div>
-                            <img className={`${styles.card}`} src={`${thumbnail}`} alt="Thumbnail"/>
+                        <div className={styles.thumbnailContainer}>
+                            <img className={`${styles.thumbnail}`} src={`${thumbnail}`} alt="Thumbnail"/>
+                            <div className={styles.durationContainer}>
+                                {duration}
+                            </div>
                         </div>
                         <h3 className={styles.title}>{title}</h3>
                         <div>
@@ -15,9 +18,6 @@ export function Card({url, thumbnail, title, views, date, duration}) {
                             </div>
                             <div>
                                 {date}
-                            </div>
-                            <div className={styles.durationContainer}>
-                                {duration}
                             </div>
                         </div>
                     </div>

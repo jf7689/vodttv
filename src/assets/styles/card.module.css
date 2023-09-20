@@ -10,3 +10,21 @@
     overflow: hidden;  
     margin-top: .25rem;
 }
+
+.thumbnailContainer {
+    position: relative;
+}
+
+.thumbnail {
+    border-radius: .5rem;
+}
+
+.durationContainer {
+    position: absolute;
+    bottom: 3%;
+    right: 2%;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, .7);
+    padding: .25rem;
+    border-radius: .25rem;
+}
