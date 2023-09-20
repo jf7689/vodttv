@@ -1,0 +1,21 @@
+.userSearch {
+    padding: .25rem 0;
+    padding-left: .5rem;
+    border-width: .15rem;
+    border-radius: .5rem;
+}
+
+.userSearch:focus {
+    outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .userSearch {
+        background-color: rgb(15, 15, 15);
+        border-color: rgb(65, 65, 65);
+    }
+    
+    .userSearch:focus {
+        border-color: rgb(145, 71, 255);
+    }
+}

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
-import loadAnim from "../assets/images/loading.svg"
 
 export function Grid({url, client_id, token, streamer_id}) {
     const [vods, setVods] = useState([]);
@@ -245,18 +244,17 @@ export function Grid({url, client_id, token, streamer_id}) {
 
     return (
         <>
-            <button onClick={checkVods}>Vods</button>
+            {/*<button onClick={checkVods}>Vods</button>*/}
 
             <div className={!isLoaded && streamer_id !== undefined ? styles.shown : styles.hidden}>
-                <div>
-                    <img src={loadAnim} alt="Loading Animation"/>
+                <div className={styles.loadContainer}>
                     <h2>...Loading All Vods</h2>
                 </div>
             </div>
             <div className={isLoaded ? styles.shown: styles.hidden} id="FilterSection">
-                <form onSubmit={handleTitleSearch} className="title-form">
-                    <div className="form-row">
-                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
+                <form onSubmit={handleTitleSearch}>
+                    <div>
+                        <input className={styles.titleSearch} value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
                     </div>
                 </form>
                 <dialog id="dateFilter">
@@ -289,11 +287,11 @@ export function Grid({url, client_id, token, streamer_id}) {
                     </div>
                 </dialog>
                 <div>
-                    <button onClick={latestVods}>Latest</button>
-                    <button onClick={popular}>Popular</button>
-                    <button onClick={oldestVods}>Oldest</button>
-                    <button onClick={reverseFilter}>Reverse Order</button>
-                    <button onClick={getYears}>Date Filters</button>
+                    <button className={styles.btn} onClick={latestVods}>Latest</button>
+                    <button className={styles.btn} onClick={popular}>Popular</button>
+                    <button className={styles.btn} onClick={oldestVods}>Oldest</button>
+                    <button className={styles.btn} onClick={reverseFilter}>Reverse Order</button>
+                    <button className={styles.btn} onClick={getYears}>Date Filters</button>
                 </div>
             </div>
 

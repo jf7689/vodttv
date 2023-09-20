@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "../assets/styles/userSearch.module.css"
 
 export function UserSearch({url, client_id, token, idCallback}) {
   const [newName, setNewName] = useState("");
@@ -32,9 +33,9 @@ export function UserSearch({url, client_id, token, idCallback}) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="streamer-form">
-        <div className="form-row">
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} type="text" id="user-search" placeholder="Twitch Username"/>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input className={styles.userSearch} value={newName} onChange={(e) => setNewName(e.target.value)} type="text" id="user-search" placeholder="Twitch Username"/>
         </div>
       </form>
     </>

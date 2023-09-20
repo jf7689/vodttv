@@ -16,7 +16,7 @@ export function Card({url, thumbnail, title, views, date, duration}) {
                             <div>
                                 {date}
                             </div>
-                            <div>
+                            <div className={styles.durationContainer}>
                                 {duration}
                             </div>
                         </div>

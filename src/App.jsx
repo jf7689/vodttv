@@ -107,11 +107,11 @@ export default function App() {
     <div>
       <header>
         <div className={styles.headerContainer}>
-          <h2 id={styles.title}>VodTTV</h2>
+          <a href="" className={styles.title}>VodTTV</a>
           <UserSearch className={styles.search} url={url} client_id={client_id} token={token} idCallback={handleIdCallback}/>
         </div>
       </header>
-      <div></div>
+
       <div id="access_token"></div>
 
       <div className={`${styles.introContainer} ${streamerId !== "" ? styles.hidden : styles.shown}`}>
