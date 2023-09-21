@@ -94,6 +94,11 @@ header {
     a {
         color: rgb(241, 241, 241);
     }
+
+    select {
+        background-color: rgb(15, 15, 15);
+        border-color: rgb(65, 65, 65);
+    }
 }
 
 @media (min-width: 700px) {

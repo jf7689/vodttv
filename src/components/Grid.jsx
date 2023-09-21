@@ -257,7 +257,7 @@ export function Grid({url, client_id, token, streamer_id}) {
                         <input className={styles.titleSearch} value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Search Title"/>
                     </div>
                 </form>
-                <dialog id="dateFilter">
+                <dialog className={styles.dialog} id="dateFilter">
                     <select value={year} onChange={handleSetYear}>
                         <option value="Year">Year</option>
                         {allYears.map(yearOption => {
@@ -281,9 +281,9 @@ export function Grid({url, client_id, token, streamer_id}) {
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select>
-                    <button onClick={closeFilterModal}>Close</button>
-                    <div>
-                        <button onClick={dateFilter}>Filter</button>
+                    <div className={styles.btnFilterContainer}>
+                        <button className={styles.dialogBtn} onClick={dateFilter}>Filter</button>
+                        <button className={styles.dialogBtn} onClick={closeFilterModal}>Close</button>
                     </div>
                 </dialog>
                 <div>
