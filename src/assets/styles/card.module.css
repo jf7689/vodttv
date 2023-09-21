@@ -1,5 +1,17 @@
-.card {
+.cardContainer {
     outline: 1px black solid;
+    /*fill up row height of grid*/
+    height: 100%;
+}
+
+.card {
+    display: block;
+    height: 100%;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
@@ -8,7 +20,9 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;  
-    margin-top: .25rem;
+    margin-top: .75rem;
+    margin-bottom: .5rem;
+    font-size: 1.25rem;
 }
 
 .thumbnailContainer {
@@ -27,4 +41,12 @@
     background-color: rgba(0, 0, 0, .7);
     padding: .25rem;
     border-radius: .25rem;
+}
+
+.infoContainer {
+    margin-top: auto;
+}
+
+.infoItem {
+    margin-top: .25rem;
 }
