@@ -1,12 +1,10 @@
 # VodTTV
 
-Plan to build a website for filtering through twitch vods better. 
+Website for filtering through twitch vods. Make finding specific vods easier and reduce scrolling 
+by not having to start from latest vods.
 
-## Learned Skills
-- React
-- Fetch
-- Use async and await
-
-## Tasks
-- Filter by year and month
-- Search by title
+## Functionalities
+- Latest, Oldest, Popular
+- Search by Title
+- Filter by Year and/or Month
+- Reverse Order of vods

@@ -118,8 +118,7 @@ export default function App() {
         <div className={styles.introContent}>
           <h1 className={styles.introTitle}>VodTTV</h1>
           <p className={styles.introPar}>
-            Looking to find Twitch vods easier. VodTTV provides you the ability to search vods by title and filtering
-            by date. Make your life easier with less scrolling.  
+            Looking to find Twitch vods easier? VodTTV is here for you. Make your life better with less scrolling.  
           </p>
           <a className={` ${isValid ? styles.hidden : styles.shown}`} href="" id="authorize"> 
             <div>

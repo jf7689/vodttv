@@ -292,8 +292,8 @@ export function Grid({url, client_id, token, streamer_id}) {
                     <button className={styles.btn} onClick={latestVods}>Latest</button>
                     <button className={styles.btn} onClick={popular}>Popular</button>
                     <button className={styles.btn} onClick={oldestVods}>Oldest</button>
-                    <button className={styles.btn} onClick={reverseFilter}>Reverse Order</button>
                     <button className={styles.btn} onClick={getYears}>Date Filters</button>
+                    <button className={styles.btn} onClick={reverseFilter}>Reverse Order</button>
                 </div>
             </div>
 
