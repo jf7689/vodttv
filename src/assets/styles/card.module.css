@@ -1,5 +1,4 @@
 .cardContainer {
-    outline: 1px black solid;
     /*fill up row height of grid*/
     height: 100%;
 }
@@ -38,6 +37,7 @@
     bottom: 3%;
     right: 2%;
     z-index: 100;
+    color: rgb(241, 241, 241);
     background-color: rgba(0, 0, 0, .7);
     padding: .25rem;
     border-radius: .25rem;

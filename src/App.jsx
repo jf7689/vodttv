@@ -108,7 +108,7 @@ export default function App() {
       <header>
         <div className={styles.headerContainer}>
           <a href="" className={styles.title}>VodTTV</a>
-          <UserSearch className={styles.search} url={url} client_id={client_id} token={token} idCallback={handleIdCallback}/>
+          <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback}/>
         </div>
       </header>
 

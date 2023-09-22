@@ -19,3 +19,14 @@
         border-color: rgb(145, 71, 255);
     }
 }
+
+@media (prefers-color-scheme: light) {
+    .userSearch {
+        background-color: rgb(255, 255, 255);
+        border-color: rgb(238, 238, 238);
+    }
+    
+    .userSearch:focus {
+        border-color: rgb(119, 44, 232);
+    }
+}
