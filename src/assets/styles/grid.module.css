@@ -39,8 +39,16 @@
 }
 
 .dialog {
+    max-width: 300px;
+    min-width: 230px;
+    width: 100%;
     border-width: .15rem;
     border-radius: .5rem;
+}
+
+.dropdownContainer {
+    display: flex;
+    justify-content: space-between;
 }
 
 .btnFilterContainer {

@@ -51,6 +51,7 @@ a {
 header {
     position: sticky;
     top: 0;
+    z-index: 200;
 }
 
 .headerContainer {
@@ -98,6 +99,10 @@ header {
     select {
         background-color: rgb(15, 15, 15);
         border-color: rgb(65, 65, 65);
+    }
+
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, .7);
     }
 }
 
