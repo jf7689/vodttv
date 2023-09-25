@@ -73,7 +73,6 @@ export default function App() {
         if (parsedHash.get("access_token")) {
             const access_token = parsedHash.get("access_token");
             setToken(access_token);
-            console.log("Access Token stored");
             localStorage.setItem("ACCESS_TOKEN", JSON.stringify(access_token));
         }
     }
@@ -89,15 +88,6 @@ export default function App() {
   useEffect(() => {
     validateToken();
   }, [token]);
-
-  // check data
-  function check() {
-    console.log(token);
-    console.log(url);
-    console.log(client_id);
-    console.log(streamerId);
-    console.log(props);
-  }
 
   function handleIdCallback(streamer_id) {
     setStreamerId(streamer_id);
@@ -134,7 +124,7 @@ export default function App() {
         </div>
 
       </div>
-      {/*<button className="btn" onClick={check}>Token</button>*/}
+  
       <Grid {...(props.streamer_id !== "" && props)} searchCallback={handleSearchCallback}/>
     </div>
   );

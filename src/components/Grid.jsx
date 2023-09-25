@@ -61,7 +61,6 @@ export function Grid({url, client_id, token, streamer_id, searchCallback}) {
 
             // loop for rest of vods if they exist
             while (Object.keys(paginationObj).length !== 0) {
-                console.log(cursor);
                 try {
                     const response = await fetch(
                         `${url}/videos?user_id=${streamer_id}&type=archive&first=100&after=${cursor}`,
@@ -226,33 +225,21 @@ export function Grid({url, client_id, token, streamer_id, searchCallback}) {
         setVods([]);
 
         vodsLoaded();
-
-        console.log("Grab Vods");
-
     }, [streamer_id]);
 
     // Show first 30 vods after a filter has been applied
     useEffect(() => {
         setVods([...filterVods.slice(0, 30)]);
-        console.log("Triggered");
     }, [filterVods])
-
-    function checkVods() {
-        console.log("All Vods", allVods);
-        console.log("Filter Vods", filterVods);
-        console.log("Shown Vods", vods);
-        console.log("All Years", allYears);
-    }
 
     return (
         <>
-            {/*<button onClick={checkVods}>Vods</button>*/}
-
             <div className={!isLoaded && streamer_id !== undefined ? styles.shown : styles.hidden}>
                 <div className={styles.loadContainer}>
                     <h2>...Loading All Vods</h2>
                 </div>
             </div>
+
             <div className={isLoaded ? styles.shown: styles.hidden} id="FilterSection">
                 <form onSubmit={handleTitleSearch}>
                     <div>
@@ -300,23 +287,23 @@ export function Grid({url, client_id, token, streamer_id, searchCallback}) {
             </div>
 
             <div className={styles.grid}>
-            {vods.map((vod, i) => {
-                // Set thumbnail dimensions for url
-                let thumbnail = vod.thumbnail_url;
-                thumbnail = thumbnail.replace("%{width}", "666").replace("%{height}", "375");
-                if (thumbnail.includes("404/404")) {
-                    thumbnail = liveIcon;
-                }
+                {vods.map((vod, i) => {
+                    // Set thumbnail dimensions for url
+                    let thumbnail = vod.thumbnail_url;
+                    thumbnail = thumbnail.replace("%{width}", "666").replace("%{height}", "375");
+                    if (thumbnail.includes("404/404")) {
+                        thumbnail = liveIcon;
+                    }
 
-                // Create Grid of vods
-                return (
-                    <div ref={i === vods.length - 1 ? lastCard : null} key={vod.id}>
-                        <Card  url={vod.url} thumbnail={thumbnail} title={vod.title} views={formatter.format(vod.view_count)}
-                        date={vod.published_at.slice(0,10)} duration={vod.duration}
-                        />
-                    </div>
-                );
-            })}
+                    // Create Grid of vods
+                    return (
+                        <div ref={i === vods.length - 1 ? lastCard : null} key={vod.id}>
+                            <Card  url={vod.url} thumbnail={thumbnail} title={vod.title} views={formatter.format(vod.view_count)}
+                            date={vod.published_at.slice(0,10)} duration={vod.duration}
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </>
     );
