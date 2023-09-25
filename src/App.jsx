@@ -7,7 +7,7 @@ import connectImg from "./assets/images/twitch_login.png";
 export default function App() {
   const url = "https://api.twitch.tv/helix"
   const client_id = "33phdwakkutmw0tyvhvenz0a0jhwd6"
-  const redirect = "http://localhost:5173"
+  const redirect = "https://vodttv.netlify.app/"
 
   // Access token
   const [isValid, setIsValid] = useState(false);
