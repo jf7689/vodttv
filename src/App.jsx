@@ -80,7 +80,7 @@ export default function App() {
       // Error
       var parsedParams = new URLSearchParams(window.location.search);
       if (parsedParams.get("error_description")) {
-          document.getElementById("access_token").textContent = `${parsedParams.get("error")} - authorization required to use site`;
+          document.getElementById("access_token").textContent = `${parsedParams.get("error")} - Twitch connection required to use site`;
       }
     }
   }
@@ -108,7 +108,7 @@ export default function App() {
         </div>
       </header>
 
-      <div id="access_token"></div>
+      <div className={styles.errorResponse} id="access_token"></div>
 
       <div className={`${styles.introContainer} ${streamerId !== "" ? styles.hidden : styles.shown}`}>
         <div className={styles.introContent}>
