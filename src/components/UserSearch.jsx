@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../assets/styles/userSearch.module.css"
 
-export function UserSearch({url, client_id, token, idCallback}) {
+export function UserSearch({url, client_id, token, idCallback, hideSearch}) {
   const [newName, setNewName] = useState("");
 
   // Get twitch id for searched username
@@ -30,14 +30,15 @@ export function UserSearch({url, client_id, token, idCallback}) {
     // Clear search bar
     setNewName("");
   }
-
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input className={styles.userSearch} value={newName} onChange={(e) => setNewName(e.target.value)} type="text" id="user-search" placeholder="Twitch Username"/>
-        </div>
-      </form>
-    </>
-  );
+  if (!hideSearch) {
+    return (
+      <>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <input className={styles.userSearch} value={newName} onChange={(e) => setNewName(e.target.value)} type="text" id="user-search" placeholder="Twitch Username"/>
+          </div>
+        </form>
+      </>
+    );
+  }
 }

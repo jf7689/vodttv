@@ -18,7 +18,7 @@ export default function App() {
     }
     return JSON.parse(localToken);
   });
-  // Streamer id
+  // Streamer
   const [streamerId, setStreamerId] = useState("");
   // Grid props
   const [props, setProps] = useState({
@@ -27,6 +27,8 @@ export default function App() {
     token: token,
     streamer_id: ""
   });
+  // Hide username search 
+  const [hideSearch, setHideSearch] = useState(false);
 
   async function validateToken() {
     if (token !== "") {
@@ -102,13 +104,17 @@ export default function App() {
     setProps({...props, streamer_id: streamer_id})
   }
 
+  function handleSearchCallback(hidden) {
+    setHideSearch(hidden);
+  }
+
 
   return (
     <div>
       <header>
         <div className={styles.headerContainer}>
           <a href="" className={styles.title}>VodTTV</a>
-          <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback}/>
+          <UserSearch url={url} client_id={client_id} token={token} idCallback={handleIdCallback} hideSearch={hideSearch}/>
         </div>
       </header>
 
@@ -129,7 +135,7 @@ export default function App() {
 
       </div>
       {/*<button className="btn" onClick={check}>Token</button>*/}
-      <Grid {...(props.streamer_id !== "" && props)}/>
+      <Grid {...(props.streamer_id !== "" && props)} searchCallback={handleSearchCallback}/>
     </div>
   );
 }

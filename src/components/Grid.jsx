@@ -3,7 +3,7 @@ import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
 
-export function Grid({url, client_id, token, streamer_id}) {
+export function Grid({url, client_id, token, streamer_id, searchCallback}) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
     const [filterVods, setFilterVods] = useState([]);
@@ -20,6 +20,7 @@ export function Grid({url, client_id, token, streamer_id}) {
         let cursor = "";
         let paginationObj = {};
         setIsLoaded(false);
+        searchCallback(true);
         
         if (streamer_id !== undefined) {
             try {
@@ -101,6 +102,7 @@ export function Grid({url, client_id, token, streamer_id}) {
     // Check all vods have been loaded
     async function vodsLoaded() {
         const isLoaded = await getVods();
+        searchCallback(false);
         if (isLoaded) {
             setIsLoaded(true);
         }
