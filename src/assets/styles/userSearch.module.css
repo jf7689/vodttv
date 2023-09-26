@@ -3,6 +3,7 @@
     padding-left: .5rem;
     border-width: .15rem;
     border-radius: .5rem;
+    min-width: 320px;
 }
 
 .userSearch:focus {
