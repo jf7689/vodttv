@@ -1,7 +1,7 @@
 # VodTTV
 
-Website for filtering through twitch vods. Make finding specific vods easier and reduce scrolling 
-by not having to start from latest vods.
+Website that makes finding desired Twitch vods easier. Improves user exeperience by introducing more search and filter functionalities. Replacing the tedious scrolling required on Twitch's website. Responsive on different resolutions and built
+from a mobile first design.
 
 ## Functionalities
 - Latest, Oldest, Popular
