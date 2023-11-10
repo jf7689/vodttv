@@ -4,7 +4,7 @@ Website that makes finding desired Twitch vods easier. Improves user exeperience
 Responsive on different resolutions and built from a mobile first design.
 
 ## Functionalities
-- Latest, Oldest, Popular
+- Sort by Latest, Oldest, Popular
 - Search by Title
 - Filter by Year and/or Month
 - Reverse Order of vods
