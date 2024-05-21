@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../assets/styles/userSearch.module.css"
 
-export function UserSearch({url, client_id, token, idCallback, hideSearch, isValid}) {
+export function UserSearch({ idCallback, hideSearch }) {
   const [newName, setNewName] = useState("");
 
   // Get twitch id for searched username
@@ -10,18 +10,9 @@ export function UserSearch({url, client_id, token, idCallback, hideSearch, isVal
 
     // Get streamer's id
     try {
-      const response = await fetch(
-        `${url}/users?login=${newName}`,   
-        {
-          method: "GET",
-          headers: {            
-            "Client-ID": client_id,                
-            "Authorization": `Bearer ${token}`           
-          }
-        }
-      );
+      const response = await fetch(`http://localhost:3000/api/users/${newName}`);
       const responseData = await response.json();
-      idCallback(responseData.data[0]["id"]);
+      idCallback(responseData.id);
     }
     catch(error) {
       console.log(error);
@@ -31,7 +22,7 @@ export function UserSearch({url, client_id, token, idCallback, hideSearch, isVal
     setNewName("");
   }
 
-  if (!hideSearch && isValid) {
+  if (!hideSearch) {
     return (
       <>
         <form onSubmit={handleSubmit}>
