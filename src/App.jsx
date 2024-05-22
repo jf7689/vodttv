@@ -46,7 +46,7 @@ export default function App() {
         </div>
       </div>
   
-      {/*<Grid {...(props.streamer_id !== "" && props)} searchCallback={handleSearchCallback}/>*/}
+      {streamerId && <Grid streamer_id={streamerId} searchCallback={handleSearchCallback}/>}
     </div>
   );
 }

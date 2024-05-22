@@ -32,5 +32,5 @@ export function UserSearch({ idCallback, hideSearch }) {
         </form>
       </>
     );
-  }isValid
+  }
 }

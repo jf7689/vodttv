@@ -3,7 +3,7 @@ import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
 
-export function Grid({url, client_id, token, streamer_id, searchCallback}) {
+export function Grid({ streamer_id, searchCallback }) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
     const [filterVods, setFilterVods] = useState([]);
@@ -17,40 +17,19 @@ export function Grid({url, client_id, token, streamer_id, searchCallback}) {
 
     // Get vods
     async function getVods() {
-        let cursor = "";
-        let paginationObj = {};
         setIsLoaded(false);
         searchCallback(true);
         
         if (streamer_id !== undefined) {
             try {
                 // Get first page of vods
-                const response = await fetch(
-                    `${url}/videos?user_id=${streamer_id}&type=archive&first=30`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Client-ID": client_id,
-                            "Authorization": `Bearer ${token}`
-                        }
-                    }
-                );
+                const response = await fetch(`http://localhost:3000/api/users/vods/${streamer_id}`);
                 const responseData = await response.json();
 
                 // Store vods for reference for filtering
-                setAllVods(currentVods => {
-                    return [...currentVods, ...responseData.data]
-                });
+                setAllVods(responseData);
                 // Default filter is latests vods
-                setFilterVods(currentVods => {
-                    return [...currentVods, ...responseData.data]
-                });
-                
-                // Check for next page of vods
-                paginationObj = responseData.pagination;
-                if (Object.keys(paginationObj).length !== 0) {
-                    cursor = paginationObj.cursor;
-                }
+                setFilterVods(responseData);
             }
             catch(error) {
                 console.log(error);
@@ -58,41 +37,6 @@ export function Grid({url, client_id, token, streamer_id, searchCallback}) {
 
             // Show first 30 vods
             setVods([...allVods].slice(0, 30));
-
-            // loop for rest of vods if they exist
-            while (Object.keys(paginationObj).length !== 0) {
-                try {
-                    const response = await fetch(
-                        `${url}/videos?user_id=${streamer_id}&type=archive&first=100&after=${cursor}`,
-                        {
-                            method: "GET",
-                            headers: {
-                                "Client-ID": client_id,
-                                "Authorization": `Bearer ${token}`
-                            }
-                        }
-                    )
-                    const responseData = await response.json();
-
-                    // Store vods for reference for filtering
-                    setAllVods(currentVods => {
-                        return [...currentVods, ...responseData.data]
-                    });
-                    // Default filter is latests vods
-                    setFilterVods(currentVods => {
-                        return [...currentVods, ...responseData.data]
-                    });
-
-                    // Check for next page of vods
-                    paginationObj = responseData.pagination;
-                    if (Object.keys(paginationObj).length !== 0) {
-                        cursor = paginationObj.cursor;
-                    }                  
-                }
-                catch(error) {
-                    console.log(error);
-                }
-            }
 
             return true;
         }
