@@ -72,20 +72,6 @@ header {
     color: rgb(145, 71, 255);
 }
 
-.introContainer {
-    margin: 2rem 0rem;
-}
-
-.introTitle {
-    text-align: center;
-    color: rgb(145, 71, 255);
-}
-
-.introPar {
-    font-size: 1.25rem;
-    text-align: center;
-}
-
 .connect {
     margin: auto;
 }
@@ -139,9 +125,5 @@ header {
     }
     .title {
         display: block;
-    }
-
-    .introContent {
-        margin: 0rem 10rem;
     }
 }
