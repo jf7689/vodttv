@@ -7,4 +7,4 @@ Responsive on different resolutions and built from a mobile first design.
 - Sort by Latest, Oldest, Popular
 - Search by Title
 - Filter by Year and/or Month
-- Reverse Order of vods
+- Reverse Order of current filter
