@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "./Card";
 import styles from "../assets/styles/grid.module.css";
 import liveIcon from "../assets/images/live.png";
 
-export function Grid({ streamer_id, searchCallback }) {
+export function Grid({ searchCallback }) {
     const [vods, setVods] = useState([]);
     const [allVods, setAllVods] = useState([]);
     const [filterVods, setFilterVods] = useState([]);
@@ -14,32 +15,49 @@ export function Grid({ streamer_id, searchCallback }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const formatter = Intl.NumberFormat("en", { notation: "compact" });
     const observer = useRef(null);
+    const { user } = useParams();
+    const navigate = useNavigate();
 
     // Get vods
     async function getVods() {
         setIsLoaded(false);
         searchCallback(true);
-        
-        if (streamer_id !== undefined) {
-            try {
-                // Get first page of vods
-                const response = await fetch(`http://localhost:3000/api/users/vods/${streamer_id}`);
-                const responseData = await response.json();
+        let streamerId;
 
-                // Store vods for reference for filtering
-                setAllVods(responseData);
-                // Default filter is latests vods
-                setFilterVods(responseData);
+        try {
+            // Get id of user
+            const response = await fetch(`http://localhost:3000/api/users/${user}`);
+            const responseData = await response.json();
+            // User doesn't exist
+            if (responseData.msg) {
+                navigate("/error");
+                return;
             }
-            catch(error) {
-                console.log(error);
-            }
-
-            // Show first 30 vods
-            setVods([...allVods].slice(0, 30));
-
-            return true;
+            streamerId = responseData.id;
         }
+        catch(error) {
+            console.log(error);
+        }
+
+        try {
+            // Get first page of vods
+            const response = await fetch(`http://localhost:3000/api/users/vods/${streamerId}`);
+            const responseData = await response.json();
+
+            // Store vods for reference for filtering
+            setAllVods(responseData);
+            // Default filter is latests vods
+            setFilterVods(responseData);
+        }
+        catch(error) {
+            console.log(error);
+        }
+
+        // Show first 30 vods
+        setVods([...allVods].slice(0, 30));
+
+        return true;
+        
     }
 
     // Check all vods have been loaded
@@ -159,7 +177,6 @@ export function Grid({ streamer_id, searchCallback }) {
         // Observe new last vod
         observer.current.observe(node);
     }, [loadNewCards])
-
     
     // Username had been searched
     useEffect(() => {
@@ -169,7 +186,7 @@ export function Grid({ streamer_id, searchCallback }) {
         setVods([]);
 
         vodsLoaded();
-    }, [streamer_id]);
+    }, [user]);
 
     // Show first 30 vods after a filter has been applied
     useEffect(() => {
@@ -178,7 +195,7 @@ export function Grid({ streamer_id, searchCallback }) {
 
     return (
         <>
-            <div className={!isLoaded && streamer_id !== undefined ? styles.shown : styles.hidden}>
+            <div className={!isLoaded ? styles.shown : styles.hidden}>
                 <div className={styles.loadContainer}>
                     <h2>...Loading All Vods</h2>
                 </div>

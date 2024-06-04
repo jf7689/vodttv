@@ -1,23 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../assets/styles/userSearch.module.css"
 
 export function UserSearch({ idCallback, hideSearch }) {
   const [newName, setNewName] = useState("");
+  const navigate = useNavigate();
 
   // Get twitch id for searched username
   async function handleSubmit(e) {
     e.preventDefault();
+    // Go to route for the searched name
+    navigate(`/${newName}`);
 
-    // Get streamer's id
-    try {
-      const response = await fetch(`http://localhost:3000/api/users/${newName}`);
-      const responseData = await response.json();
-      idCallback(responseData.id);
-    }
-    catch(error) {
-      console.log(error);
-    }
-    
     // Clear search bar
     setNewName("");
   }
