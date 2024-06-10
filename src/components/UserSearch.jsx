@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../assets/styles/userSearch.module.css"
 
-export function UserSearch({ idCallback, hideSearch }) {
+export function UserSearch({ hideSearch }) {
   const [newName, setNewName] = useState("");
   const navigate = useNavigate();
 
