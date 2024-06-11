@@ -26,7 +26,7 @@ export function Grid({ searchCallback }) {
 
         try {
             // Get id of user
-            const response = await fetch(`http://localhost:3000/api/users/${user}`);
+            const response = await fetch(`https://vodttvapi.vercel.app/api/users/${user}`);
             const responseData = await response.json();
             // User doesn't exist
             if (responseData.msg) {
@@ -41,7 +41,7 @@ export function Grid({ searchCallback }) {
 
         try {
             // Get first page of vods
-            const response = await fetch(`http://localhost:3000/api/users/vods/${streamerId}`);
+            const response = await fetch(`https://vodttvapi.vercel.app/api/users/vods/${streamerId}`);
             const responseData = await response.json();
 
             // Store vods for reference for filtering
